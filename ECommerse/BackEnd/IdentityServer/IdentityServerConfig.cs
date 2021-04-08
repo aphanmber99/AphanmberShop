@@ -41,9 +41,9 @@ namespace BackEnd.IdentityServer
 
                     AllowedGrantTypes = GrantTypes.Code,
 
-                    RedirectUris = { "https://localhost:44367/signin-oidc" },
+                    RedirectUris = { "https://localhost:5003/signin-oidc" },
 
-                    PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
+                    PostLogoutRedirectUris = { "https://localhost:5003/signout-callback-oidc" },
 
                     AllowedScopes = new List<string>
                     {
@@ -61,9 +61,9 @@ namespace BackEnd.IdentityServer
                     RequireConsent = false,
                     RequirePkce = true,
 
-                    RedirectUris =           { $"https://localhost:44341/swagger/oauth2-redirect.html" },
-                    PostLogoutRedirectUris = { $"https://localhost:44341/swagger/oauth2-redirect.html" },
-                    AllowedCorsOrigins =     { $"https://localhost:44341" },
+                    RedirectUris =           { $"https://localhost:5001/swagger/oauth2-redirect.html" },
+                    PostLogoutRedirectUris = { $"https://localhost:5001/swagger/oauth2-redirect.html" },
+                    AllowedCorsOrigins =     { $"https://localhost:5001" },
 
                     AllowedScopes = new List<string>
                     {

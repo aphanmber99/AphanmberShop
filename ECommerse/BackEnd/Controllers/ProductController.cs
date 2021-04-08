@@ -3,6 +3,7 @@ using System.Linq;
 using BackEnd.Data;
 using BackEnd.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackEnd.Controllers
 {
@@ -16,38 +17,38 @@ namespace BackEnd.Controllers
         }
 
         [HttpGet]
-        public List<Product> GetList(){
-            List<Product> resutl = _context.Products.ToList();
+        public async System.Threading.Tasks.Task<List<Product>> GetListAsync(){
+            List<Product> resutl = await _context.Products.ToListAsync();
             return resutl;
         }
         [HttpGet("search")]
-        public IActionResult Search(string query){
+        public async System.Threading.Tasks.Task<IActionResult> SearchAsync(string query){
             if(query == null || query == "") return BadRequest();
-            List<Product> result = _context.Products.Where(item => item.proName.Contains(query)).ToList();
+            List<Product> result = await _context.Products.Where(item => item.proName.Contains(query)).ToListAsync();
             return Ok(result);
         }
         [HttpGet("{id}")]
 
-        public Product Get(int id){
+        public async System.Threading.Tasks.Task<Product> GetAsync(int id){
             if(id<=0) return null;
-            Product result = _context.Products.Find(id);
+            Product result = await _context.Products.FindAsync(id);
             return result;
         }
         [HttpDelete("{id}")]     
-           public IActionResult Delete(int id)
+           public async System.Threading.Tasks.Task<IActionResult> DeleteAsync(int id)
         {    
             if(id<=0) return NotFound();
-            Product obj = _context.Products.Find(id);
+            Product obj =  await _context.Products.FindAsync(id);
             if(obj == null) return NotFound();
             _context.Remove(obj);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Ok();
         }
         [HttpPut("{id}")]
-        public IActionResult Update(int id, Product product )
+        public async System.Threading.Tasks.Task<IActionResult> UpdateAsync(int id, Product product )
         {    
             if(id<=0) return BadRequest();
-            Product obj = _context.Products.Find(id);
+            Product obj = await _context.Products.FindAsync(id);
             if(obj == null) return BadRequest();
             //
             obj.proName = product.proName;
@@ -55,14 +56,14 @@ namespace BackEnd.Controllers
             obj.proDescription = product.proDescription;
             obj.Image = product.Image;
             //
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Ok();
         }
         [HttpPost]
         public IActionResult Create(Product product )
         {    
-            _context.Add(product);
-            _context.SaveChanges();
+            _context.AddAsync(product);
+            _context.SaveChangesAsync();
             return Ok();
         }
 
