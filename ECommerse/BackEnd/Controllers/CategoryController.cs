@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using BackEnd.Data;
+using BackEnd.Interface;
 using BackEnd.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Shared.ViewModel;
+using System.Threading.Tasks;
 
 namespace BackEnd.Controllers
 {
@@ -11,58 +14,40 @@ namespace BackEnd.Controllers
     [Route("controller")]
     public class CategoryController: ControllerBase
     {
-        private AplicationDbContext _context;
+        private ICategoryService _cateService;
         
-        public CategoryController (AplicationDbContext context){
-            context =_context;
+        public CategoryController (ICategoryService cateService){
+            _cateService =cateService;
         }
         [HttpGet]
-        public async System.Threading.Tasks.Task<List<Category>> GetListAsync(){
-            List<Category> result =  await _context.Categories.ToListAsync();
-            return result;
-        }
-        [HttpGet("search")]
-        public async System.Threading.Tasks.Task<IActionResult> SearchAsync(string query){
-            if(query == null || query =="") return BadRequest();
-            List<Category> result = await _context.Categories.Where(item => item.Name.Contains(query)).ToListAsync();
-            return Ok(result);
+        
+        public async Task<List<CategoryVM>> GetListAsync(){
+            return await _cateService.GetListAsync();
         }
         [HttpGet("{id}")]
 
-        public async System.Threading.Tasks.Task<Category> GetAsync(int id){
-            if(id<=0) return null;
-            Category result = await _context.Categories.FindAsync(id);
-            return result;
+        public async Task<CategoryVM> GetAsync(int id){
+            return await _cateService.GetAsync(id);
         }
         [HttpDelete("{id}")]     
-           public async System.Threading.Tasks.Task<IActionResult> DeleteAsync(int id)
+           public async Task<IActionResult> DeleteAsync(int id)
         {    
-            if(id<=0) return NotFound();
-            Category obj = await _context.Categories.FindAsync(id);
-            if(obj == null) return NotFound();
-            _context.Remove(obj);
-            _context.SaveChanges();
+            var result = await _cateService.DeleteAsync(id);
+            if(result == false) return BadRequest();
             return Ok();
         }
         [HttpPut("{id}")]
-        public async System.Threading.Tasks.Task<IActionResult> UpdateAsync(int id, Category category )
+        public async Task<IActionResult> UpdateAsync(int id, CategoryVM category )
         {    
-            if(id<=0) return BadRequest();
-            Category obj = await _context.Categories.FindAsync(id);
-            if(obj == null) return BadRequest();
-            
-            obj.Name = category.Name;
-            obj.ID = category.ID;
-           
-        
-            _context.SaveChanges();
+            var result = await _cateService.UpdateAsync(id, category);
+            if(result == false) return BadRequest();
             return Ok();
         }
         [HttpPost]
-        public async System.Threading.Tasks.Task<IActionResult> CreateAsync(Category category )
+        public async Task<IActionResult> CreateAsync(CategoryVM category )
         {    
-            await _context.AddAsync(category);
-            await _context.SaveChangesAsync();
+            var result = await _cateService.CreateAsync(category);
+            if(result == null) return BadRequest();
             return Ok();
         }
 
