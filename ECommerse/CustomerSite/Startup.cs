@@ -24,7 +24,12 @@ namespace CustomerSite
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-             services.AddAuthentication(options =>
+
+            services.AddHttpClient("host",option =>{ 
+                option.BaseAddress = new Uri("https://localhost:5001/");
+            });
+
+            services.AddAuthentication(options =>
             {
                 options.DefaultScheme = "Cookies";
                 options.DefaultChallengeScheme = "oidc";
@@ -52,6 +57,7 @@ namespace CustomerSite
                         RoleClaimType = "role"
                     };
                 });
+                
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "Identity/Account/Login";
