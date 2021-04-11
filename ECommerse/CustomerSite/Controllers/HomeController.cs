@@ -6,32 +6,48 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using CustomerSite.Models;
+using System.Net.Http;
+using System.Net.Http.Json;
+using Shared.ViewModel;
 
 namespace CustomerSite.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IHttpClientFactory _httpCleint;
+        
+        public HomeController(IHttpClientFactory httpCleint)
         {
-            _logger = logger;
+            _httpCleint = httpCleint;
         }
 
-        public IActionResult Index()
+        // public HomeController()
+        // {}
+
+        // public async Task<IActionResult> IndexAsync()
+        // {
+        //     var httpclient = new HttpClient();
+        //     httpclient.BaseAddress = new Uri("https://localhost:5001/");
+        //     var resp =await httpclient.GetAsync("product");
+        //     var reuslt = resp.Content.ReadAsStringAsync();
+        //     return View();
+        // }
+
+        public async Task<IActionResult> IndexAsync()
         {
+            // var httpclient = _httpCleint.CreateClient("host");
+            var httpclient = new HttpClient();
+            httpclient.BaseAddress = new Uri("https://localhost:5001/");
+            var resp =await httpclient.GetAsync("product");
+            var reuslt =await resp.Content.ReadFromJsonAsync<List<ProductVM>>();
+            ViewBag.ProductNews = reuslt.Take(3);
             return View();
+            
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        //should it be another async method for category or we just override the IndexAsync()
+        // another method for the cateGory 
     }
 }

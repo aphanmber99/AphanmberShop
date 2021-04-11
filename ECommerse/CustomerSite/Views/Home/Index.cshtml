@@ -1,4 +1,6 @@
-﻿@section Scripts{
+﻿@model Shared.ViewModel.ProductVM;
+
+@section Scripts{
 <script> var splide = new Splide(".splide", {
             perPage: 4,
             rewind: true,
@@ -39,44 +41,19 @@
 </div>
 <!--New Arrival List-->
 <div class="settingtext d-block ">New Arrivals</div>
-<div class="container ">
+<div class="container">
     <div class="row">
-        <div class="col-3 text-center">
-            <img src="~/images/p3.webp">
-            <div class="text-center">
-                <p>qProduct name</p>
-                <p>2000
-                <p>
+        @foreach (var item in ViewBag.ProductNews)
+        {
+            <div class="col-3 text-center">
+                <img src="~/images/p3.webp">
+                <div class="text-center">
+                    <p>@item.proName</p>
+                    <p>@item.proPrice</p>
+                    <p>@item.proDescription</p>
+                </div>
             </div>
-
-        </div>
-
-        <div class="col-3 text-center">
-            <img src="~/images/p4.jpeg">
-            <div class="text-center">
-                <p>Product name</p>
-                <p>2000
-                <p>
-            </div>
-
-        </div>
-        <div class="col-3 text-center">
-            <img src="~/images/p4.jpeg">
-            <div class="text-center">
-                <p>Product name</p>
-                <p>2000
-                <p>
-            </div>
-
-        </div>
-        <div class="col-3 text-center">
-            <img src="~/images/p3.webp">
-            <div class="text-center">
-                <p>Product name</p>
-                <p>2000
-                <p>
-            </div>
-        </div>
+        }  
     </div>
 </div>
 <!--the Poster Sliding Bar-->
