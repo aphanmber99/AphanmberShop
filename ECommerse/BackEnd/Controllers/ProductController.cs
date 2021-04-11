@@ -4,6 +4,8 @@ using BackEnd.Data;
 using BackEnd.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Shared.ViewModel;
+using AutoMapper;
 
 namespace BackEnd.Controllers
 {
@@ -12,14 +14,22 @@ namespace BackEnd.Controllers
     public class ProductController : ControllerBase
     {
         private AplicationDbContext _context;
-        public ProductController(AplicationDbContext context){
-            _context = context;
-        }
 
+        private IMapper _mapper;
+        public ProductController(AplicationDbContext context, IMapper mapper){
+            _context = context;
+            _mapper = mapper;
+        }
         [HttpGet]
-        public async System.Threading.Tasks.Task<List<Product>> GetListAsync(){
-            List<Product> resutl = await _context.Products.ToListAsync();
-            return resutl;
+        public async System.Threading.Tasks.Task<List<ProductVM>> GetListAsync(){
+            List<Product> result = await _context.Products.ToListAsync();
+            List<ProductVM> productVMs = new List<ProductVM>();
+            foreach (var p in result)
+            {
+                var productVM = _mapper.Map<ProductVM>(p);
+                productVMs.Add(productVM);
+            }
+            return productVMs;
         }
         [HttpGet("search")]
         public async System.Threading.Tasks.Task<IActionResult> SearchAsync(string query){
@@ -28,7 +38,6 @@ namespace BackEnd.Controllers
             return Ok(result);
         }
         [HttpGet("{id}")]
-
         public async System.Threading.Tasks.Task<Product> GetAsync(int id){
             if(id<=0) return null;
             Product result = await _context.Products.FindAsync(id);
@@ -60,10 +69,10 @@ namespace BackEnd.Controllers
             return Ok();
         }
         [HttpPost]
-        public IActionResult Create(Product product )
-        {    
-            _context.AddAsync(product);
-            _context.SaveChangesAsync();
+        public async System.Threading.Tasks.Task<IActionResult> CreateAsync(Product product )
+        {
+            await _context.AddAsync(product);
+            await _context.SaveChangesAsync();
             return Ok();
         }
 
