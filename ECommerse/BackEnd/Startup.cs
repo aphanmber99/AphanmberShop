@@ -11,6 +11,9 @@ using BackEnd.IdentityServer;
 using BackEnd.Models;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Identity;
+using AutoMapper;
+using BackEnd.Interface;
+using BackEnd.Service;
 
 namespace BackEnd
 {
@@ -26,30 +29,35 @@ namespace BackEnd
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddScoped<ICategoryService, CategoryService>();
+            
+            services.AddAutoMapper(typeof(MapperConfig).Assembly);
+
             services.AddDbContext<AplicationDbContext>(options => options
                     .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
-            .AddRoles<IdentityRole>()
-      .AddEntityFrameworkStores<AplicationDbContext>();
+                    .AddRoles<IdentityRole>()
+                    .AddEntityFrameworkStores<AplicationDbContext>();
 
             services.AddIdentityServer(options =>
-       {
-           options.Events.RaiseErrorEvents = true;
-           options.Events.RaiseInformationEvents = true;
-           options.Events.RaiseFailureEvents = true;
-           options.Events.RaiseSuccessEvents = true;
-           options.EmitStaticAudienceClaim = true;
-       })
-          .AddInMemoryIdentityResources(IdentityServerConfig.IdentityResources)
-          .AddInMemoryApiScopes(IdentityServerConfig.ApiScopes)
-          .AddInMemoryClients(IdentityServerConfig.Clients)
-          .AddAspNetIdentity<User>()
-          .AddProfileService<CustomerProfileService>()
-          .AddDeveloperSigningCredential(); // not recommended for production - you need to store your key material somewhere secure
+            {
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseSuccessEvents = true;
+                options.EmitStaticAudienceClaim = true;
+            })
+                    .AddInMemoryIdentityResources(IdentityServerConfig.IdentityResources)
+                    .AddInMemoryApiScopes(IdentityServerConfig.ApiScopes)
+                    .AddInMemoryClients(IdentityServerConfig.Clients)
+                    .AddAspNetIdentity<User>()
+                    .AddProfileService<CustomerProfileService>()
+                    .AddDeveloperSigningCredential(); // not recommended for production - you need to store your key material somewhere secure
 
-
-        services.AddAuthentication().AddLocalApi("Bearer", option => {
+        services.AddAuthentication()
+            .AddLocalApi("Bearer", option => {
             option.ExpectedScope ="rookieshop.api";
         });
         services.AddAuthorization(option =>{
@@ -58,8 +66,8 @@ namespace BackEnd
                 policy.RequireAuthenticatedUser();
             });
         });
-            services.AddControllersWithViews();
-            services.AddSwaggerGen(c =>
+        services.AddControllersWithViews();
+        services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Rookie Shop API", Version = "v1" });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -106,11 +114,9 @@ namespace BackEnd
             app.UseStaticFiles();
 
             app.UseRouting();
-app.UseIdentityServer();
-            // app.UseAuthentication();
+            app.UseIdentityServer();
             app.UseAuthorization();
-            
-            
+        
             app.UseSwagger();
             app.UseSwaggerUI(c => {
                 c.OAuthClientId("swagger");
@@ -121,9 +127,6 @@ app.UseIdentityServer();
 
             app.UseEndpoints(endpoints =>
             {
-                // endpoints.MapControllerRoute(
-                //     name: "default",
-                //     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapDefaultControllerRoute();
             });
         }
