@@ -24,11 +24,11 @@ namespace BackEnd.Service
             return _mapper.Map<ProductVM>(pro);
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        async Task<bool> DeleteAsync(int id)
         {
-            if(id<=0) return false;
+            if (id <= 0) return false;
             Product obj = await _context.Products.FindAsync(id);
-            if(obj== null) return false;
+            if (obj == null) return false;
             _context.Remove(obj);
             _context.SaveChanges();
             return true;
@@ -36,19 +36,21 @@ namespace BackEnd.Service
 
         public async Task<ProductVM> GetAsync(int id)
         {
-            if(id <=0) return null;
+            if (id <= 0) return null;
             Product result = await _context.Products.FindAsync(id);
             return _mapper.Map<ProductVM>(result);
         }
 
-        public async Task<(List<ProductVM> products , int totalItem)> GetListAsync(int categoryId, SortProduct? sort = null,int pageSize = 0, int page = 0)
+        public async Task<(List<ProductVM> products, int totalItem)> GetListAsync(int categoryId, SortProduct? sort = null, int pageSize = 0, int page = 0)
         {
             var queryProduct = _context.Products.AsQueryable();
-            if(categoryId!=0) queryProduct = queryProduct.Where(item => item.CategoryId ==categoryId);
+            if (categoryId != 0) queryProduct = queryProduct.Where(item => item.CategoryId == categoryId);
             var totalItem = queryProduct.Count();
 
-            if(sort!=null){
-                switch(sort){
+            if (sort != null)
+            {
+                switch (sort)
+                {
                     case SortProduct.highPrice:
                         queryProduct = queryProduct.OrderByDescending(item => item.proPrice);
                         break;
@@ -57,15 +59,16 @@ namespace BackEnd.Service
                         break;
                 }
             }
-            if(page !=0){
-                if(pageSize * (page-1) <= totalItem) // 10
-                    queryProduct = queryProduct.Skip(page-1).Take(pageSize);
+            if (page != 0)
+            {
+                if (pageSize * (page - 1) <= totalItem) // 10
+                    queryProduct = queryProduct.Skip(page - 1).Take(pageSize);
             }
 
             var result = await queryProduct.ToListAsync();
 
 
-            var  proVMs =  new List<ProductVM>();
+            var proVMs = new List<ProductVM>();
             foreach (var item in result)
             {
                 var proVM = _mapper.Map<ProductVM>(item);
@@ -76,11 +79,13 @@ namespace BackEnd.Service
         public async Task<(List<ProductVM> products, int totalItem)> SearchAsync(string query, SortProduct? sort, int pageSize, int page)
         {
             var queryProduct = _context.Products.AsQueryable();
-            if(query!="") queryProduct = queryProduct.Where(item => item.proName.Contains(query));
+            if (query != "") queryProduct = queryProduct.Where(item => item.proName.Contains(query));
             var totalItem = queryProduct.Count();
 
-            if(sort!=null){
-                switch(sort){
+            if (sort != null)
+            {
+                switch (sort)
+                {
                     case SortProduct.highPrice:
                         queryProduct = queryProduct.OrderByDescending(item => item.proPrice);
                         break;
@@ -89,15 +94,16 @@ namespace BackEnd.Service
                         break;
                 }
             }
-            if(page !=0){
-                if(pageSize * (page-1) <= totalItem) // 10
-                    queryProduct = queryProduct.Skip(page-1).Take(pageSize);
+            if (page != 0)
+            {
+                if (pageSize * (page - 1) <= totalItem) // 10
+                    queryProduct = queryProduct.Skip(page - 1).Take(pageSize);
             }
 
             var result = await queryProduct.ToListAsync();
 
 
-            var  proVMs =  new List<ProductVM>();
+            var proVMs = new List<ProductVM>();
             foreach (var item in result)
             {
                 var proVM = _mapper.Map<ProductVM>(item);
@@ -106,7 +112,17 @@ namespace BackEnd.Service
             return (proVMs, totalItem);
         }
 
-        public Task<bool> UpdateAsync(int id, ProductVM productvm)
+        public async Task<bool> UpdateAsync(int id, ProductVM productvm)
+        {
+            if (id <= 0) return false;
+            Product obj = await _context.Products.FindAsync(id);
+            if (obj == null) return false;
+            obj.proName = productvm.proName;
+            _context.SaveChanges();
+            return true;
+        }
+
+        Task<bool> IProduct.DeleteAsync(int id)
         {
             throw new System.NotImplementedException();
         }

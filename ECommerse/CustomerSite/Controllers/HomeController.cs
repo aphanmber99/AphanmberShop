@@ -43,7 +43,6 @@ namespace CustomerSite.Controllers
             var reuslt =await resp.Content.ReadFromJsonAsync<List<ProductVM>>();
             ViewBag.ProductNews = reuslt.Take(3);
             return View();
-            
         }
 
 
