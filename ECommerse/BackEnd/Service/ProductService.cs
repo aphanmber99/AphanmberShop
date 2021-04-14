@@ -11,11 +11,17 @@ using Shared.ViewModel;
 
 namespace BackEnd.Service
 {
-    public class ProductService : IProduct
+    public class ProductService : IProductService
 
     {
         private AplicationDbContext _context;
         private IMapper _mapper;
+
+        public ProductService (AplicationDbContext context, IMapper mapper){
+            context =_context;
+            _mapper =mapper;
+        }
+        
         public async Task<ProductVM> CreateAsync(ProductVM productvm)
         {
             var pro = _mapper.Map<Product>(productvm);
@@ -24,7 +30,7 @@ namespace BackEnd.Service
             return _mapper.Map<ProductVM>(pro);
         }
 
-        async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             if (id <= 0) return false;
             Product obj = await _context.Products.FindAsync(id);
@@ -41,7 +47,7 @@ namespace BackEnd.Service
             return _mapper.Map<ProductVM>(result);
         }
 
-        public async Task<(List<ProductVM> products, int totalItem)> GetListAsync(int categoryId, SortProduct? sort = null, int pageSize = 0, int page = 0)
+        public async Task<(List<ProductVM> products, int totalItem)> GetListAsync(int categoryId, SortProduct? sort, int pageSize, int page)
         {
             var queryProduct = _context.Products.AsQueryable();
             if (categoryId != 0) queryProduct = queryProduct.Where(item => item.CategoryId == categoryId);
@@ -120,11 +126,6 @@ namespace BackEnd.Service
             obj.proName = productvm.proName;
             _context.SaveChanges();
             return true;
-        }
-
-        Task<bool> IProduct.DeleteAsync(int id)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

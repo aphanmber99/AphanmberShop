@@ -1,10 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
-using BackEnd.Data;
 using BackEnd.Interface;
-using BackEnd.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Shared.ViewModel;
 using System.Threading.Tasks;
 
@@ -17,10 +13,10 @@ namespace BackEnd.Controllers
         private ICategoryService _cateService;
         
         public CategoryController (ICategoryService cateService){
-            _cateService =cateService;
+            _cateService = cateService;
         }
-        [HttpGet]
         
+        [HttpGet]
         public async Task<List<CategoryVM>> GetListAsync(){
             return await _cateService.GetListAsync();
         }

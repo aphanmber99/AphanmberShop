@@ -31,12 +31,15 @@ namespace BackEnd
         {
 
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IRatingService, RatingService>();
+            services.AddScoped<IProductService, ProductService>();
             
             services.AddAutoMapper(typeof(MapperConfig).Assembly);
 
             services.AddDbContext<AplicationDbContext>(options => options
                     .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
+
             services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<AplicationDbContext>();
@@ -114,6 +117,7 @@ namespace BackEnd
             app.UseStaticFiles();
 
             app.UseRouting();
+            
             app.UseIdentityServer();
             app.UseAuthorization();
         

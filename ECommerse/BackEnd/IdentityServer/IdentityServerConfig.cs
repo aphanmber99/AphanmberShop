@@ -41,9 +41,9 @@ namespace BackEnd.IdentityServer
 
                     AllowedGrantTypes = GrantTypes.Code,
 
-                    RedirectUris = { "https://localhost:5003/signin-oidc" },
+                    RedirectUris = { "https://localhost:6001/signin-oidc" },
 
-                    PostLogoutRedirectUris = { "https://localhost:5003/signout-callback-oidc" },
+                    PostLogoutRedirectUris = { "https://localhost:5001/signout-callback-oidc" },
 
                     AllowedScopes = new List<string>
                     {
