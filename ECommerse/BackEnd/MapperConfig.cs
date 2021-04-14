@@ -13,6 +13,10 @@ namespace BackEnd
             //
             CreateMap<Category, CategoryVM>();
             CreateMap<CategoryVM, Category>();
+            //
+            CreateMap<Rating,RatingVM>()
+                .ForMember(item => item.UserName, opt => opt.MapFrom(item => item.User.UserName));
+            CreateMap<RatingVM,Rating>();
         }
     }
 }
