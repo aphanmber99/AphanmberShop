@@ -39,14 +39,9 @@ namespace CustomerSite.Controllers
             // var httpclient = _httpCleint.CreateClient("host");
             var httpclient = new HttpClient();
             httpclient.BaseAddress = new Uri("https://localhost:5001/");
-            var resp =await httpclient.GetAsync("product");
-            var reuslt =await resp.Content.ReadFromJsonAsync<List<ProductVM>>();
-            ViewBag.ProductNews = reuslt.Take(3);
-            return View();
+            var resp = await httpclient.GetAsync("product");
+            var reuslt = await resp.Content.ReadFromJsonAsync<List<ProductVM>>();
+            return View(reuslt);
         }
-
-
-        //should it be another async method for category or we just override the IndexAsync()
-        // another method for the cateGory 
     }
 }

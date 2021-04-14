@@ -1,4 +1,4 @@
-﻿@model Shared.ViewModel.ProductVM;
+﻿@model List<Shared.ViewModel.ProductVM>;
 
 @section Scripts{
 <script> var splide = new Splide(".splide", {
@@ -43,10 +43,10 @@
 <div class="settingtext d-block ">New Arrivals</div>
 <div class="container">
     <div class="row">
-        @foreach (var item in ViewBag.ProductNews)
+        @foreach (var item in Model)
         {
             <div class="col-3 text-center">
-                <img src="~/images/p3.webp">
+               <img src="~/images/@item.Image">
                 <div class="text-center">
                     <p>@item.proName</p>
                     <p>@item.proPrice</p>
