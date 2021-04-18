@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace BackEnd.Controllers
 {
     [ApiController]
-    [Route("controller")]
+    [Route("[controller]")]
     public class CategoryController: ControllerBase
     {
         private ICategoryService _cateService;

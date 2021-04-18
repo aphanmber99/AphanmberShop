@@ -18,7 +18,7 @@ namespace BackEnd.Service
         private IMapper _mapper;
 
         public ProductService (AplicationDbContext context, IMapper mapper){
-            context =_context;
+             _context= context;
             _mapper =mapper;
         }
         

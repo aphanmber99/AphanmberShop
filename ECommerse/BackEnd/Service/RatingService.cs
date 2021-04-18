@@ -17,7 +17,7 @@ namespace BackEnd.Service
         private IMapper _mapper;
 
         public RatingService (AplicationDbContext context, IMapper mapper){
-            context =_context;
+            _context =context;
             _mapper =mapper;
         }
 
