@@ -14,6 +14,11 @@ namespace CustomerSite
 {
     public class Startup
     {
+
+        public static string ResUri = "";
+        public static string ResProductUri = "";
+
+    
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -21,14 +26,18 @@ namespace CustomerSite
 
         public IConfiguration Configuration { get; }
 
+
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            ResUri = Configuration.GetSection("ResUri").Value;
+            ResProductUri = Configuration.GetSection("ResProductUri").Value;
+            // config client
             services.AddHttpClient("host",option =>{ 
-                option.BaseAddress = new Uri("https://localhost:5001/");
+                option.BaseAddress = new Uri(ResUri);
             });
-
+            // config authe
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = "Cookies";
