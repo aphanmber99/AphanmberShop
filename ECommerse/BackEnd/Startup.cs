@@ -70,6 +70,7 @@ namespace BackEnd
             });
         });
         services.AddControllersWithViews();
+        services.AddRazorPages();
         services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Rookie Shop API", Version = "v1" });
@@ -98,8 +99,6 @@ namespace BackEnd
                 });
             });
         }
-
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -132,6 +131,7 @@ namespace BackEnd
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
+                endpoints.MapRazorPages();
             });
         }
     }

@@ -1,11 +1,11 @@
 using BackEnd.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackEnd.Data
 {
-    public class AplicationDbContext : DbContext
+    public class AplicationDbContext : IdentityDbContext<User>
     {
-        public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Rating> Ratings { get; set; }
