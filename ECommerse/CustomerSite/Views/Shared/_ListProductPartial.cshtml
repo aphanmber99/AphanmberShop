@@ -1,0 +1,26 @@
+@model IEnumerable<Shared.ViewModel.ProductVM>
+
+<div class="container">
+    @if (Model == null || Model.Count() == 0)
+    {
+        <p class="text-uppercases">no data</p>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-3 text-center">
+                    <div class="product-item px-3 text-center">
+                        <img src="~/images/p3.webp">
+                        <a class="text-center product-description" href="#">
+                            <p>@item.proName</p>
+                            <p class="product-price">$ @item.proPrice</p>
+                            <p>@item.proDescription</p>
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
