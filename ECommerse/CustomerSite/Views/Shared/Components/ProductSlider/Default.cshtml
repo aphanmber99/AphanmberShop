@@ -1,0 +1,37 @@
+@model IEnumerable<Shared.ViewModel.ProductVM>
+<div class="settingtext d-block ">@ViewBag.TitleSlider</div>
+<div class="container">
+    @if (Model == null || Model.Count() == 0)
+    {
+        <p>no data</p>
+    }
+    else
+    {
+        <div id="splide" class="splide">
+            <div class="splide__track">
+                <ul class="splide__list">
+                    @foreach (var item in Model)
+                    {
+                        <li class="splide__slide">
+                            <div class="product-item px-3 text-center">
+                                <img src="~/images/p3.webp">
+                                <a class="text-center product-description" href="#">
+                                    <p>@item.proName</p>
+                                    <p class="product-price">$ @item.proPrice</p>
+                                    <p>@item.proDescription</p>
+                                </a>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+</div>
+@* <script> var splide = new Splide("#splide", {
+        perPage: 4,
+        rewind: true,
+
+    }).mount();
+</script> *@
+
