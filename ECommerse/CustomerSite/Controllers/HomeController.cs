@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,39 +10,26 @@ using CustomerSite.Models;
 using System.Net.Http;
 using System.Net.Http.Json;
 using Shared.ViewModel;
+using Microsoft.AspNetCore.Authentication;
+using System.Net.Http.Headers;
 
 namespace CustomerSite.Controllers
 {
     public class HomeController : Controller
     {
-
-        private readonly IHttpClientFactory _httpCleint;
-        
-        public HomeController(IHttpClientFactory httpCleint)
-        {
-            _httpCleint = httpCleint;
+        public HomeController()
+        {         
         }
 
-        // public HomeController()
-        // {}
-
-        // public async Task<IActionResult> IndexAsync()
-        // {
-        //     var httpclient = new HttpClient();
-        //     httpclient.BaseAddress = new Uri("https://localhost:5001/");
-        //     var resp =await httpclient.GetAsync("product");
-        //     var reuslt = resp.Content.ReadAsStringAsync();
-        //     return View();
-        // }
-
-        public async Task<IActionResult> IndexAsync()
+        public IActionResult Index()
         {
-            // var httpclient = _httpCleint.CreateClient("host");
-            var httpclient = new HttpClient();
-            httpclient.BaseAddress = new Uri("https://localhost:5001/");
-            var resp = await httpclient.GetAsync("product");
-            var reuslt = await resp.Content.ReadFromJsonAsync<List<ProductVM>>();
-            return View(reuslt);
+            return View();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

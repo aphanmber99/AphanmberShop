@@ -1,14 +1,4 @@
-﻿@model List<Shared.ViewModel.ProductVM>;
-
-@section Scripts{
-<script> var splide = new Splide(".splide", {
-            perPage: 4,
-            rewind: true,
-
-        }).mount();
-</script>
-}
-<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+﻿<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
                 aria-current="true" aria-label="Slide 1"></button>
@@ -40,92 +30,10 @@
         </button>
 </div>
 <!--New Arrival List-->
-<div class="settingtext d-block ">New Arrivals</div>
-<div class="container">
-    <div class="row">
-        @foreach (var item in Model)
-        {
-            <div class="col-3 text-center">
-               <img src="~/images/@item.Image">
-                <div class="text-center">
-                    <p>@item.proName</p>
-                    <p>@item.proPrice</p>
-                    <p>@item.proDescription</p>
-                </div>
-            </div>
-        }  
-    </div>
-</div>
+@await Component.InvokeAsync("ProductPreview",new {categoryId =1, titlePreview ="Hair Products"});
 <!--the Poster Sliding Bar-->
-<div class="settingtext d-block ">Selling Fast</div>
-<div class="container">
-    <div id="splide" class="splide">
-        <div class="splide__track">
-            <ul class="splide__list">
-                <li class="splide__slide">
-                    <div class="product-item px-3 text-center">
-                        <img src="~/images/p3.webp">
-                        <a class="text-center product-description" href="#">
-                            <p>Product name</p>
-                            <p class="product-price">$2000</p>
-                            <p>Detail Perscription</p>
-                        </a>
-                    </div>
-                </li>
-                <li class="splide__slide">
-                    <div class="product-item px-3 text-center">
-                        <img src="~/images/p4.jpeg">
-                        <a class="text-center product-description" href="#">
-                            <p>Product name</p>
-                            <p class="product-price">$2000</p>
-                            <p>Detail Perscription</p>
-                        </a>
-                    </div>
-                </li>
-                <li class="splide__slide">
-                    <div class="product-item px-3 text-center">
-                        <img src="~/images/p4.jpeg">
-                        <a class="text-center product-description" href="#">
-                            <p>Product name</p>
-                            <p class="product-price">$2000</p>
-                            <p>Detail Perscription</p>
-                        </a>
-                    </div>
-                </li>
-                <li class="splide__slide">
-                    <div class="product-item px-3 text-center">
-                        <img src="~/images/p4.jpeg">
-                        <a class="text-center product-description" href="#">
-                            <p>Product name</p>
-                            <p class="product-price">$2000</p>
-                            <p>Detail Perscription</p>
-                        </a>
-                    </div>
-                </li>
-                <li class="splide__slide">
-                    <div class="product-item px-3 text-center">
-                        <img src="~/images/p4.jpeg">
-                        <a class="text-center product-description" href="#">
-                            <p>Product name</p>
-                            <p class="product-price">$2000</p>
-                            <p>Detail Perscription</p>
-                        </a>
-                    </div>
-                </li>
-                <li class="splide__slide">
-                    <div class="product-item px-3 text-center">
-                        <img src="~/images/p3.webp">
-                        <a class="text-center product-description" href="#">
-                            <p>Product name</p>
-                            <p class="product-price">$2000</p>
-                            <p>Detail Perscription</p>
-                        </a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
+@await Component.InvokeAsync("ProductPreview",new {categoryId =1, titlePreview ="Abc Products"});
+
 <!--Value Set-->
 <div class="settingtext d-block">Value Sets</div>
 <div>

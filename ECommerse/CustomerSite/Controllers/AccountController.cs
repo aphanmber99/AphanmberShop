@@ -6,11 +6,11 @@ namespace CustomerSite.Controllers
 {
     public class AccountController : Controller
     {
-        public IActionResult SignIn(){
+        public IActionResult Login(){
             return Challenge(new AuthenticationProperties  { RedirectUri = "/" }, "oidc");
         }
-        public IActionResult SignOut(){
-            return Challenge(new AuthenticationProperties  { RedirectUri = "/" }, "Cookies","oidc");
+        public IActionResult Logout(){
+            return SignOut(new AuthenticationProperties  { RedirectUri = "/" }, "Cookies","oidc");
         }
         [Authorize]
         public ActionResult MyProfile(){
