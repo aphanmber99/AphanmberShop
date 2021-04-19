@@ -23,7 +23,7 @@ namespace CustomerSite.Views.Shared.Components.ProductPreview
 
         public async Task<IViewComponentResult> InvokeAsync( int categoryId, string titleSlider)
         {
-            var queryString = RequestHelper.GetQueryString(categoryId,8, 0 ,SortProduct.highPrice);
+            var queryString = RequestHelper.GetQueryString(categoryId,6, 0 ,SortProduct.highPrice);
             var _httpCleint = _httpFactory.CreateClient("host");
 
             var resp = await  _httpCleint.GetAsync("product"+queryString);
