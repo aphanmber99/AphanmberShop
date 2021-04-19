@@ -68,8 +68,10 @@ namespace BackEnd.Service
             if (page != 0)
             {
                 if (pageSize * (page - 1) <= totalItem) // 10
-                    queryProduct = queryProduct.Skip(page - 1).Take(pageSize);
+                    queryProduct = queryProduct.Skip(page - 1);
             }
+            if (pageSize!=0)
+                queryProduct = queryProduct.Take(pageSize);
 
             var result = await queryProduct.ToListAsync();
 
