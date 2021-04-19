@@ -52,6 +52,8 @@ namespace CustomerSite.Controllers
             var resp = await client.GetAsync("product/" + id);
             if(!resp.IsSuccessStatusCode) return Redirect("/Home/Error");
             //
+                 // RateTING FEATURE
+            //
             var reuslt = await resp.Content.ReadFromJsonAsync<ProductVM>();
             return View("ProductDetail",reuslt);
         }

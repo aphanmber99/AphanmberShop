@@ -41,7 +41,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpPost("{productId}/{userId}")]
-        public async Task<IActionResult> CreateAsync(string userId, int productId,RatingVM ratingVM )
+        public async Task<IActionResult> CreateAsync(string userId, int productId, RatingVM ratingVM )
         {    
             if(userId == null || productId <= 0 ) return BadRequest();
             var result = await _ratingSer.CreateAsync(userId,productId, ratingVM);
