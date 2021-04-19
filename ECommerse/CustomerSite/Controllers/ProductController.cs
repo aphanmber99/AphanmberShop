@@ -45,16 +45,15 @@ namespace CustomerSite.Controllers
             return View( "ListProduct",products);
         }   
 
-        [HttpGet("{id}")]
+        [HttpGet("/product/{id}")]
         public async Task<IActionResult> Detail(int id)
         {
-            var httpclient = new HttpClient();
-            httpclient.BaseAddress = new Uri("https://localhost:44324/");
-            var resp = await httpclient.GetAsync("product/" + id);
+            var client = _httpCleint.CreateClient("host");
+            var resp = await client.GetAsync("product/" + id);
+            if(!resp.IsSuccessStatusCode) return Redirect("/Home/Error");
+            //
             var reuslt = await resp.Content.ReadFromJsonAsync<ProductVM>();
-            ViewBag.Item=1;
-            ViewData["Items"]=9.2;
-            return View(reuslt);
+            return View("ProductDetail",reuslt);
         }
     }
 }

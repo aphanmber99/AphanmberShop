@@ -1,43 +1,43 @@
+@model Shared.ViewModel.ProductVM;
+
 @section Scripts{
-<script> var splide = new Splide(".splide", {
+<script> 
+    var splide = new Splide("#splide2", {
         perPage: 4,
         rewind: true,
-
     }).mount();
 </script>
+}
+@{
+    var arDes = Model.proDescription.Split("/");
+    var summary = arDes[0] ?? "";
+    var desscription = arDes[1] ?? "";
 }
 <div class="py-3"> </div>
 <div class="product-detail-page">
     <div class="row">
-       
             <div class="col-5 product-detail-img">
-                <div id="splide" class="splide">
+                <div id="splide2" class="splide">
                     <div class="splide__track">
                         <ul class="splide__list">
-                            <li class="splide__slide"><img src="~/images/p5.webp" alt=""></li>
-                            <li class="splide__slide"><img src="~/images/p4.jpeg" alt=""></li>
-                            <li class="splide__slide">Slide 03</li>
+                            <li class="splide__slide"><img product-src="@Model.Image" alt=""/></li>
                         </ul>
                     </div>
                 </div>
             </div>
-
             <div class="col-7">
                 <h4 class="mb-3">
-                    <div class="product-name">Patrick</div>
-                    <div class="product-summary">Major Sculpt Creme Contour & Powder Bronzer Duo
-                    </div>
+                    <div class="product-name">@Model.proName</div>
+                    <div class="product-summary">@summary</div>
                 </h4>
                 <div class="mb-3">
-                    <bold>$ 50.000</bold>
+                    <bold>$ @Model.proPrice</bold>
                 </div>
                 <div class="mb-3">
                     <a href="">Write a review</a>
                 </div>
                 <div class="product-description mb-3">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Error officiis dolores necessitatibus
-                        odio impedit quidem perspiciatis, recusandae autem aspernatur corrupti ab eaque praesentium.
-                        Eaque quae voluptatum commodi aliquam ipsam dicta.</p>
+                    <p>@desscription</p>
                 </div>
                 <div class="py-3">
                     <div class="shippingreturn d-block" data-bs-toggle="modal" data-bs-target="#exampleModal" href="">
