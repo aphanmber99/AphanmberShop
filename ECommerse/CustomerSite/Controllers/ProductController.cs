@@ -14,7 +14,6 @@ namespace CustomerSite.Controllers
 {
     public class ProductController : Controller
     {
-        //add CustomerSite Controller
         private readonly IHttpClientFactory _httpCleint;
         
         private readonly int _pageSize = 8;
