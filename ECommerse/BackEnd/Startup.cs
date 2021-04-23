@@ -112,6 +112,13 @@ namespace BackEnd
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseCors( c => {
+                c.WithOrigins("http://localhost:3000")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
