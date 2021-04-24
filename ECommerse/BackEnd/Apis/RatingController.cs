@@ -8,6 +8,8 @@ using Shared.ViewModel;
 
 namespace BackEnd.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class RatingController: ControllerBase
     {
         private IRatingService _ratingSer;
