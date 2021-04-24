@@ -17,6 +17,8 @@ namespace BackEnd
             CreateMap<Rating,RatingVM>()
                 .ForMember(item => item.UserName, opt => opt.MapFrom(item => item.User.UserName));
             CreateMap<RatingVM,Rating>();
+            //
+            CreateMap<User, UserVM>();
         }
     }
 }

@@ -33,6 +33,7 @@ namespace BackEnd
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IRatingService, RatingService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IUserService, UserService>();
             
             services.AddAutoMapper(typeof(MapperConfig).Assembly);
 
