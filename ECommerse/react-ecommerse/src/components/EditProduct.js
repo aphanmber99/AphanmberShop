@@ -5,23 +5,33 @@ import http from "../httpClient";
 export default function EditProduct() {
   const { id } = useParams();
   const history = useHistory();
-  const [productEdit, setProductEdit] = React.useState(null);
   const imageRef = React.useRef(null);
+  const [listCates, setCates] = React.useState([]);
   //
   const [inputName, setInputName] = React.useState("");
   const [inputDes, setInputDes] = React.useState("");
   const [inputPrice, setInputPrice] = React.useState("");
   const [inputCategoryID, setInputCategoryID] = React.useState("");
-  
+  const [productId, setProductId] = React.useState(0);
+  //
   React.useEffect(() => {
-    http.get("/product/" + id).then(({ data }) => {
-    setProductEdit(data);
-      setInputName(data.proName);
-      setInputDes(data.proDescription);
-      setInputPrice(data.proPrice);
-      setInputCategoryID(data.categoryId);
-    });
+    if (Number(id) !== 0) {
+      console.log(id);
+      http.get("/product/" + id).then(({ data }) => {
+        setProductId(data.proID);
+        setInputName(data.proName);
+        setInputDes(data.proDescription);
+        setInputPrice(data.proPrice);
+        setInputCategoryID(data.categoryId);
+      });
+    }
   }, [id]);
+
+  React.useEffect(() => {
+    http.get("/category").then(({ data }) => {
+      setCates(data);
+    });
+  });
 
   const handleChangeName = (e) => setInputName(e.target.value);
   const handleChangePrice = (e) => setInputPrice(e.target.value);
@@ -31,17 +41,46 @@ export default function EditProduct() {
   const handleCancel = () => history.goBack();
 
   const handleSubmit = () => {
-      var productSubmit ={
-          prodId: id,
-          proName: inputName,
-          proDescription: inputDes,
-          proPrice: inputPrice,
-          CategoryId: inputCategoryID,
-          Image: imageRef.current.files[0]
-      }
-      http.put("/product/"+id,productSubmit);
-      console.log(productSubmit);
+    if (!inputName && !inputCategoryID && !inputPrice) {
+      window.alert("Please fill the form below");
+      return;
+    }
+
+    var productSubmit = {
+      proID: productId,
+      proName: inputName,
+      proDescription: inputDes,
+      proPrice: inputPrice,
+      CategoryId: inputCategoryID,
+      Image: imageRef.current.files[0] ?? null,
+    };
+    var formData = new FormData();
+    for (const key in productSubmit) {
+      formData.append(key, productSubmit[key]);
+    }
+    if (productSubmit.proID === 0) {
+      http
+        .post("/product", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data;",
+          },
+        })
+        .then(() => {
+          history.goBack();
+        });
+    } else {
+      http
+        .put("/product/" + id, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data;",
+          },
+        })
+        .then(() => {
+          history.goBack();
+        });
+    }
   };
+
   return (
     <div>
       <h3 className="title is-4 pt-5">Product Detail</h3>
@@ -50,7 +89,7 @@ export default function EditProduct() {
           <label>Product Name</label>
           <div className="control">
             <input
-              className="input"
+              className={"input " + (!inputName && "is-danger")}
               type="text"
               placeholder="Text input"
               value={inputName}
@@ -62,7 +101,7 @@ export default function EditProduct() {
           <label>Price</label>
           <div className="control">
             <input
-              className="input"
+              className={"input " + (!inputPrice && "is-danger")}
               type="number"
               placeholder="Text input"
               value={inputPrice}
@@ -71,7 +110,8 @@ export default function EditProduct() {
           </div>
         </div>
         <div className="field">
-          <label>Description</label>
+          <label>Description </label>
+          <span style={{fontSize:0.5}}>Summary/Des</span>
           <div className="control">
             <input
               className="input"
@@ -85,13 +125,18 @@ export default function EditProduct() {
         <div className="field">
           <label>Category ID</label>
           <div className="control">
-            <input
-              className="input"
-              type="text"
-              placeholder="Text input"
-              value={inputCategoryID}
-              onChange={handleChangeCategoryID}
-            />
+            <div className="select">
+              <select
+                className={"input " + (!inputCategoryID && "is-danger")}
+                value={inputCategoryID}
+                onChange={handleChangeCategoryID}
+              >
+                <option value={0}>Choose Category</option>
+                {listCates.map((item) => (
+                  <option value={item.id}>{item.name}</option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
         <div className="field">
@@ -107,7 +152,9 @@ export default function EditProduct() {
         </div>
         <div className="field is-grouped">
           <div className="control">
-            <button className="button is-link" onClick={handleSubmit}>Submit</button>
+            <button className="button is-link" onClick={handleSubmit}>
+              Submit
+            </button>
           </div>
           <div className="control">
             <button className="button is-link is-light" onClick={handleCancel}>

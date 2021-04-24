@@ -7,14 +7,29 @@ export default function ProductList() {
   const [listProductt, setProducts] = React.useState([]);
 
   React.useEffect(() => {
-    http.get("/product").then(({ data }) => {
-      setProducts(data);
-      console.log(data);
-    });
+    _fetchProductData();
   }, []);
+
+  const _fetchProductData = () => {
+    http.get("/Product").then(({ data }) => {
+      setProducts(data);
+    });
+  };
+
+  const handleDelete = (itemId) => {
+    var result = window.confirm("Item will delete?");
+    if (result) {
+      http.delete("/product/" + itemId).then(() => {
+        _fetchProductData();
+      });
+    }
+  };
 
   return (
     <div className="container">
+      <button className="button is-success">
+          <Link to="/product/0">New Thuy</Link>
+      </button>
       <table className="table" style={{ width: "100%" }}>
         <thead>
           <tr>
@@ -31,7 +46,7 @@ export default function ProductList() {
               <abbr title="Product Image">Image</abbr>
             </th>
             <th>
-              <abbr title="Product Image">Description</abbr>
+              <abbr title="Product Description">Description</abbr>
             </th>
             <th></th>
           </tr>
@@ -50,9 +65,14 @@ export default function ProductList() {
               <td>
                 <div className="buttons">
                   <button className="button is-primary">
-                    <Link to={"/product/"+item.proID}>Edit</Link>
+                    <Link to={"/product/" + item.proID}>Edit</Link>
                   </button>
-                  <button className="button is-danger">Delete</button>
+                  <button
+                    className="button is-danger"
+                    onClick={() => handleDelete(item.proID)}
+                  >
+                    Delete
+                  </button>
                 </div>
               </td>
             </tr>

@@ -1,17 +1,21 @@
 import "./App.css";
+import 'react-toastify/dist/ReactToastify.css';
 import React from "react";
 import { Component } from "react";
 import { Switch, Route, Link, BrowserRouter as Router } from "react-router-dom";
+import { ToastContainer } from 'react-toastify';
+
 
 //components
 //Manage User, Category, Product
-import AddProduct from "./components/AddProduct";
+
 import Login from "./components/Login";
 import ProductList from "./components/ProductList";
-import Cart from "./components/Cart";
 import EditProduct from "./components/EditProduct";
 import Context from "./Context";
-
+import User from "./components/User";
+import Category from "./components/Category";
+import EditCategory from "./components/EditCategory";
 
 export default class App extends Component {
   constructor(props) {
@@ -19,6 +23,7 @@ export default class App extends Component {
     this.state = {
       user: null,
       cart: {},
+      category: [],
       product: [],
     };
     this.routerRef = React.createRef();
@@ -64,15 +69,13 @@ export default class App extends Component {
                   </Link>
                 </span>
                 <span>
-                  {this.state.user && this.state.user.accessLevel < 1 && (
-                    <Link to="/add-product" className="navbar-item">
-                      Add Product
-                    </Link>
-                  )}
+                  <Link to="/User" className="navbar-item">
+                    User
+                  </Link>
                 </span>
                 <span>
-                  <Link to="/cart" className="navbar-item">
-                    Carr
+                  <Link to="/Category" className="navbar-item">
+                    Category
                   </Link>
                 </span>
                 <span>
@@ -96,19 +99,22 @@ export default class App extends Component {
               <Route path="/product/:id">
                 <EditProduct/>
               </Route>
-              <Route path="/add-product" >
-                <AddProduct/>
+              <Route exact path="/category" >
+                <Category/>
               </Route>
-              <Route path="/cart">
-                <Cart/>
+              <Route path="/category/:ID">
+                <EditCategory/>
+              </Route>
+              <Route path="/User">
+                <User/>
               </Route>
               <Route path="/login">
                 <Login/>
               </Route>
               <Route path="*" components={Login} />
             </Switch>
+            <ToastContainer autoClose={2500} />
             </div>
-           
           </div>
         </Router>
       </Context.Provider>
