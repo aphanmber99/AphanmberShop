@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using BackEnd.Data;
 using BackEnd.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.ViewModel;
 
@@ -10,6 +11,7 @@ namespace BackEnd.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    // [Authorize("Bearer")]
     public class UserController: ControllerBase
     {
         private IUserService _userSer;

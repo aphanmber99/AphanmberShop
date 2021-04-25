@@ -22,17 +22,6 @@ namespace BackEnd.IdentityServer
         public static IEnumerable<Client> Clients =>
             new List<Client>
             {
-                // machine to machine client
-                new Client
-                {
-                    ClientId = "client",
-                    ClientSecrets = { new Secret("secret".Sha256()) },
-
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    // scopes that client has access to
-                    AllowedScopes = { "rookieshop.api" }
-                },
-
                 // interactive ASP.NET Core MVC client
                 new Client
                 {
@@ -41,9 +30,9 @@ namespace BackEnd.IdentityServer
 
                     AllowedGrantTypes = GrantTypes.Code,
 
-                    RedirectUris = { "https://localhost:6001/signin-oidc" },
+                    RedirectUris = { Startup.ClientUrls["mvc"]+ "/signin-oidc" },
 
-                    PostLogoutRedirectUris = { "https://localhost:5001/signout-callback-oidc" },
+                    PostLogoutRedirectUris = { Startup.ClientUrls["mvc"]+"/signout-callback-oidc" },
 
                     AllowedScopes = new List<string>
                     {

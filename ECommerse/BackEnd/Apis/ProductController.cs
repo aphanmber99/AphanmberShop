@@ -13,11 +13,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BackEnd.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    // [Authorize("Bearer")]
     public class ProductController : ControllerBase
     {
         private IProductService _productSer;
@@ -27,6 +29,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpGet]
+        // [AllowAnonymous]
         public async Task<List<ProductVM>> GetListAsync(int categoryId, SortProduct? sort = null, int pageSize = 0, int page = 0)
         {
             var re = await _productSer.GetListAsync(categoryId, sort, pageSize, page);
@@ -35,6 +38,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpGet("search")]
+        // [AllowAnonymous]
         public async Task<List<ProductVM>> SearchAsync(string query, SortProduct? sort = null, int pageSize = 0, int page = 0)
         {
             var re = await _productSer.SearchAsync(query, sort, pageSize, page);
@@ -43,6 +47,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpGet("{id}")]
+        // [AllowAnonymous]
         public async Task<ActionResult<ProductVM>> GetAsync(int id)
         {
             if (id <= 0) return BadRequest();
@@ -51,6 +56,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpDelete("{id}")]
+        // [Authorize(Roles = "admin")]
         public async Task<ActionResult> DeleteAsync(int id)
         {
             if (id <= 0) return BadRequest();
@@ -59,6 +65,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpPut("{id}")]
+        // [Authorize(Roles = "admin")]
         public async Task<ActionResult> UpdateAsync([FromServices] IWebHostEnvironment env, int id, [FromForm] ProductVM productVM, IFormFile image)
         {
             if (id != productVM.proID) return BadRequest();
@@ -83,7 +90,8 @@ namespace BackEnd.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProductVM>> CreateAsync([FromServices] IWebHostEnvironment env,[FromForm] ProductVM productVM, IFormFile image)
+        [Authorize(Roles = "admin")]
+        public async Task<ActionResult<ProductVM>> CreateAsync([FromServices] IWebHostEnvironment env, [FromForm] ProductVM productVM, IFormFile image)
         {
             if (!ModelState.IsValid) return BadRequest();
             if (image != null)

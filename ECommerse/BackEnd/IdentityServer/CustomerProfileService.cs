@@ -19,6 +19,13 @@ namespace BackEnd.IdentityServer
         private readonly ILogger<CustomerProfileService> _logger;
         private readonly UserManager<User> _userManager;
 
+        public CustomerProfileService(UserManager<User> userManager,
+            ILogger<CustomerProfileService> logger)
+        {
+            _logger = logger;
+            _userManager = userManager;
+        }
+
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
             var sub = context.Subject?.GetSubjectId();
