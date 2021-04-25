@@ -8,7 +8,6 @@ using CustomerSite.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Enum;
 using Shared.ViewModel;
-//using BackEnd.Data;
 
 namespace CustomerSite.Controllers
 {
@@ -50,9 +49,6 @@ namespace CustomerSite.Controllers
             var client = _httpCleint.CreateClient("host");
             var resp = await client.GetAsync("product/" + id);
             if(!resp.IsSuccessStatusCode) return Redirect("/Home/Error");
-            //
-                 // RateTING FEATURE
-            //
             var reuslt = await resp.Content.ReadFromJsonAsync<ProductVM>();
             return View("ProductDetail",reuslt);
         }
