@@ -19,6 +19,7 @@ namespace BackEnd
 {
     public class Startup
     {
+        public static Dictionary<string, string> ClientUrls;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -30,17 +31,21 @@ namespace BackEnd
         public void ConfigureServices(IServiceCollection services)
         {
 
+            ClientUrls = new Dictionary<string, string>()
+            {
+                ["mvc"] = Configuration.GetSection("Mvc").ToString()
+            };
+            //services
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IRatingService, RatingService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IUserService, UserService>();
-            
-            services.AddAutoMapper(typeof(MapperConfig).Assembly);
 
+            //db
             services.AddDbContext<AplicationDbContext>(options => options
                     .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
-
+            //identity
             services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<AplicationDbContext>();
@@ -59,37 +64,42 @@ namespace BackEnd
                     .AddAspNetIdentity<User>()
                     .AddProfileService<CustomerProfileService>()
                     .AddDeveloperSigningCredential(); // not recommended for production - you need to store your key material somewhere secure
-
-        services.AddAuthentication()
-            .AddLocalApi("Bearer", option => {
-            option.ExpectedScope ="rookieshop.api";
-        });
-        services.AddAuthorization(option =>{
-            option.AddPolicy("Bearer", policy=>{
-                policy.AddAuthenticationSchemes("Bearer");
-                policy.RequireAuthenticatedUser();
-            });
-        });
-        services.AddControllersWithViews();
-        services.AddRazorPages();
-        services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Rookie Shop API", Version = "v1" });
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                                                      //config
+            services.AddAuthentication()
+                .AddLocalApi("Bearer", option =>
                 {
-                    Type = SecuritySchemeType.OAuth2,
-                    Flows = new OpenApiOAuthFlows
-                    {
-                        AuthorizationCode = new OpenApiOAuthFlow
-                        {
-                            TokenUrl = new Uri("/connect/token", UriKind.Relative),
-                            AuthorizationUrl = new Uri("/connect/authorize", UriKind.Relative),
-                            Scopes = new Dictionary<string, string> { { "rookieshop.api", "Rookie Shop API" } }
-                        },
-                    },
+                    option.ExpectedScope = "rookieshop.api";
                 });
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            services.AddAuthorization(option =>
+            {
+                option.AddPolicy("Bearer", policy =>
                 {
+                    policy.AddAuthenticationSchemes("Bearer");
+                    policy.RequireAuthenticatedUser();
+                });
+            });
+            //
+            services.AddAutoMapper(typeof(MapperConfig).Assembly);
+            services.AddControllersWithViews();
+            services.AddRazorPages();
+            services.AddSwaggerGen(c =>
+                {
+                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Rookie Shop API", Version = "v1" });
+                    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                    {
+                        Type = SecuritySchemeType.OAuth2,
+                        Flows = new OpenApiOAuthFlows
+                        {
+                            AuthorizationCode = new OpenApiOAuthFlow
+                            {
+                                TokenUrl = new Uri("/connect/token", UriKind.Relative),
+                                AuthorizationUrl = new Uri("/connect/authorize", UriKind.Relative),
+                                Scopes = new Dictionary<string, string> { { "rookieshop.api", "Rookie Shop API" } }
+                            },
+                        },
+                    });
+                    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
                     {
                         new OpenApiSecurityScheme
                         {
@@ -97,8 +107,8 @@ namespace BackEnd
                         },
                         new List<string>{ "rookieshop.api" }
                     }
+                    });
                 });
-            });
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -110,26 +120,27 @@ namespace BackEnd
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
-            app.UseCors( c => {
+            app.UseCors(c =>
+            {
                 c.WithOrigins("http://localhost:3000")
                     .AllowAnyHeader()
                     .AllowAnyMethod();
             });
-            
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
-            
+
             app.UseIdentityServer();
             app.UseAuthorization();
-        
+
             app.UseSwagger();
-            app.UseSwaggerUI(c => {
+            app.UseSwaggerUI(c =>
+            {
                 c.OAuthClientId("swagger");
                 c.OAuthClientSecret("secret");
                 c.OAuthUsePkce();
