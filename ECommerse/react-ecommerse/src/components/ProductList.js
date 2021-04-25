@@ -27,9 +27,11 @@ export default function ProductList() {
 
   return (
     <div className="container">
+      <div style={{padding: "20px 20px"}}>
       <button className="button is-success">
-          <Link to="/product/0">New Thuy</Link>
+          <Link to="/product/0">New Product</Link>
       </button>
+      </div>
       <table className="table" style={{ width: "100%" }}>
         <thead>
           <tr>

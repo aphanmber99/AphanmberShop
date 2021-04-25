@@ -41,9 +41,10 @@ export default class App extends Component {
         <Router ref={this.routerRef}>
           <div className="App">
             <nav
-              className="navbar container"
+              className="navbar has-background-danger-light"
               role="navigation"
               aria-label="main navigation"
+              style= {{maxWidth: "100%"}}
             >
               <div className="navbar-brand">
                 <b className="navbar-item is size-4">Ecommerse</b>

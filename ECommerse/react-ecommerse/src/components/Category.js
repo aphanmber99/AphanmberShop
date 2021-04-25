@@ -30,7 +30,7 @@ export default function Category() {
   return (
     <div className="container">
       <button className="button is-success">
-          <Link to="/category/0">New Thuy</Link>
+          <Link to="/category/0">New Category</Link>
       </button>
       <table className="table" style={{ width: "100%" }}>
         <thead>
