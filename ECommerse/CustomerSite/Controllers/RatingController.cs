@@ -2,6 +2,8 @@ using System.Net.Http;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Shared.ViewModel;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CustomerSite.Controllers
 {
@@ -15,11 +17,12 @@ namespace CustomerSite.Controllers
         }
         
         [HttpPost("/rating/{productId}")]
-        public IActionResult Create(int productId, RatingVM ratingVM){
+        [Authorize]
+        public async Task<IActionResult> CreateAsync(int productId, RatingVM ratingVM){
             var client = _httpCleint.CreateClient("host");
             var userId=User.FindFirstValue(ClaimTypes.NameIdentifier);
-            client.PostAsJsonAsync("rating/"+productId+"/"+userId,ratingVM);            //somthing
-            return Redirect("ProductDetail");
+            var res = await client.PostAsJsonAsync("rating/"+productId+"/"+userId,ratingVM);           //somthing
+            return Redirect("/product/"+productId);
         }
     }
 }

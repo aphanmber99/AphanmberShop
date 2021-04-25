@@ -21,16 +21,14 @@ namespace CustomerSite.Views.Shared.Components.ProductPreview
             _httpFactory = httpFactory;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync()
-        {
-            
+        public async Task<IViewComponentResult> InvokeAsync(int productId)
+        {   
             var _httpCleint = _httpFactory.CreateClient("host");
-
-            var resp = await _httpCleint.GetAsync("rating/" + 0);
-            ViewBag.ProductId = 0;
+            var resp = await _httpCleint.GetAsync("rating/product/"+productId);
+            ViewBag.ProductId = productId;
             if (!resp.IsSuccessStatusCode) return View(new List<RatingVM>());
             var reuslt = await resp.Content.ReadFromJsonAsync<List<RatingVM>>();
-            //s
+            //
             return View(reuslt);
         }
     }

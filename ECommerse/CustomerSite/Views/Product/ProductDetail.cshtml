@@ -17,13 +17,14 @@
 <div class="product-detail-page">
     <div class="row">
             <div class="col-5 product-detail-img">
-                <div id="splide2" class="splide">
+                <img product-src="@Model.Image" alt=""/>
+                @* <div id="splide2" class="splide">
                     <div class="splide__track">
                         <ul class="splide__list">
-                            <li class="splide__slide"><img product-src="@Model.Image" alt=""/></li>
+                            <li class="splide__slide"></li>
                         </ul>
                     </div>
-                </div>
+                </div> *@
             </div>
             <div class="col-7">
                 <h4 class="mb-3">
@@ -79,5 +80,6 @@
             <p>Skincare Concerns: Fine lines and wrinkles, Dullness, and Uneven texture</p>
         </div>
     </div>
+    <hr>
+    @await Component.InvokeAsync("Rating", new {productId = Model.proID})
 </div>
-@await Component.InvokeAsync("Rating");
