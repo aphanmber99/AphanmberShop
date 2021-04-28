@@ -69,6 +69,7 @@ namespace BackEnd.Controllers
         public async Task<ActionResult> UpdateAsync([FromServices] IWebHostEnvironment env, int id, [FromForm] ProductVM productVM, IFormFile image)
         {
             if (id != productVM.proID) return BadRequest();
+            productVM.Image=null;
             if (image != null)
             {
                 var filePath = Path.Combine(env.WebRootPath, "images", image.FileName);
@@ -90,10 +91,11 @@ namespace BackEnd.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "admin")]
+        // [Authorize(Roles = "admin")]
         public async Task<ActionResult<ProductVM>> CreateAsync([FromServices] IWebHostEnvironment env, [FromForm] ProductVM productVM, IFormFile image)
         {
             if (!ModelState.IsValid) return BadRequest();
+            productVM.Image=null;
             if (image != null)
             {
                 var filePath = Path.Combine(env.WebRootPath, "images", image.FileName);

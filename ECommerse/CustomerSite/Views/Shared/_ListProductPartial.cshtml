@@ -11,14 +11,16 @@
             @foreach (var item in Model)
             {
                 <div class="col-3 text-center">
+                    <a href="/product/@item.proID">
                     <div class="product-item px-3 text-center">
-                        <img product-src="p3.webp"/>
-                        <a class="text-center product-description" href="/product/@item.proID">
+                        <img product-src="@item.Image"/>
+                        <span class="text-center product-description" >
                             <p>@item.proName</p>
                             <p class="product-price">$ @item.proPrice</p>
                             <p>@item.proDescription</p>
-                        </a>
+                        </span>
                     </div>
+                    </a>
                 </div>
             }
         </div>

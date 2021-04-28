@@ -125,7 +125,11 @@ namespace BackEnd.Service
             if (id <= 0) return false;
             Product obj = await _context.Products.FindAsync(id);
             if (obj == null) return false;
-            obj.proName = productvm.proName;
+            if(productvm.proName!= null) obj.proName = productvm.proName;
+            if(productvm.proDescription!=null) obj.proDescription = productvm.proDescription;
+            if(productvm.proPrice > 0) obj.proPrice = productvm.proPrice;
+            if(productvm.CategoryId > 0) obj.CategoryId = productvm.CategoryId;
+            if(productvm.Image !=null) obj.Image = productvm.Image;
             _context.SaveChanges();
             return true;
         }

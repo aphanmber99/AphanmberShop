@@ -10,8 +10,10 @@
 }
 @{
     var arDes = Model.proDescription.Split("/");
-    var summary = arDes[0] ?? "";
-    var desscription = arDes[1] ?? "";
+    var summary =  "";
+    var desscription = "";
+    if(arDes.Length>0) summary = arDes[0];
+    if(arDes.Length>1) desscription = arDes[1];
 }
 <div class="py-3"> </div>
 <div class="product-detail-page">
