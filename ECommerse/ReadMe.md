@@ -1,3 +1,5 @@
+Assignment Requirement
+
 Build an ecommerce web site with minimum functionality below:
 
 For customers
