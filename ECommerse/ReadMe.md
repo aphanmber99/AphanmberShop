@@ -1,8 +1,7 @@
-Assignment Requirement
 
-Build an ecommerce web site with minimum functionality below:
+Assignment requirement: Build an ecommerce web site with minimum functionality below:
 
-For customers
+**For customers**
 
 Home page: category menu, features products
 View products by category
@@ -11,7 +10,8 @@ Product rating
 Register
 Login/Logout
 Optional (shopping cart, ordering)
-For admin:
+
+**For admin**
 
 Login/logout
 Manage product categories (Name, Description)
