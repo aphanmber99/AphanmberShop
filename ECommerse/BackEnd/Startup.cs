@@ -19,6 +19,7 @@ namespace BackEnd
 {
     public class Startup
     {
+
         public static Dictionary<string, string> ClientUrls;
         public Startup(IConfiguration configuration)
         {
@@ -27,13 +28,12 @@ namespace BackEnd
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
 
             ClientUrls = new Dictionary<string, string>()
             {
-                ["mvc"] = Configuration.GetSection("Mvc").ToString()
+                ["mvc"] = Configuration["Mvc"]
             };
             //services
             services.AddScoped<ICategoryService, CategoryService>();
@@ -41,11 +41,11 @@ namespace BackEnd
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IUserService, UserService>();
 
-            //db
+            //DB
             services.AddDbContext<AplicationDbContext>(options => options
                     .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
-            //identity
+            //Identity
             services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<AplicationDbContext>();
@@ -78,7 +78,7 @@ namespace BackEnd
                     policy.RequireAuthenticatedUser();
                 });
             });
-            //
+            //Service Swagger
             services.AddAutoMapper(typeof(MapperConfig).Assembly);
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -110,7 +110,6 @@ namespace BackEnd
                     });
                 });
         }
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -125,7 +124,7 @@ namespace BackEnd
 
             app.UseCors(c =>
             {
-                c.WithOrigins("http://localhost:3000")
+                c.WithOrigins("https://sa066a9e3124a5476498c317.z23.web.core.windows.net")
                     .AllowAnyHeader()
                     .AllowAnyMethod();
             });

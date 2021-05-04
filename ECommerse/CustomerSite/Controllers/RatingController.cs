@@ -15,6 +15,12 @@ namespace CustomerSite.Controllers
         {
             _httpCleint = httpCleint;
         }
+
+        [HttpGet("/rating/{productId}")]
+        public IActionResult Index(int productId){
+            return Redirect("/product"+productId);
+
+        }
         
         [HttpPost("/rating/{productId}")]
         [Authorize]

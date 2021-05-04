@@ -37,7 +37,7 @@
                     <bold>$ @Model.proPrice</bold>
                 </div>
                 <div class="mb-3">
-                    <a href="">Write a review</a>
+                    <a href="#Rating-submit">Write a review</a>
                 </div>
                 <div class="product-description mb-3">
                     <p>@desscription</p>
@@ -83,5 +83,7 @@
         </div>
     </div>
     <hr>
+    <div id="Rating-submit">
     @await Component.InvokeAsync("Rating", new {productId = Model.proID})
+    </div>
 </div>

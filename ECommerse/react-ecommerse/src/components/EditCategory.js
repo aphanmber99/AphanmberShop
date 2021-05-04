@@ -2,7 +2,6 @@ import React from "react";
 import { useHistory, useParams } from "react-router-dom";
 import http from "../httpClient";
 
-
 export default function EditCategory() {
   const { ID } = useParams();
   const history = useHistory();
@@ -11,12 +10,12 @@ export default function EditCategory() {
   const [categoryId, setCategoryId] = React.useState(0);
 
   React.useEffect(() => {
-      if(ID !== 0){
-        http.get("/category/" + ID).then(({ data }) => {
-            setInputName(data.name);
-            setCategoryId(data.id);
-          });
-      }
+    if (Number(ID) !== 0) {
+      http.get("/category/" + ID).then(({ data }) => {
+        setInputName(data.name);
+        setCategoryId(data.id);
+      });
+    }
   }, [ID]);
 
   const handleSubmit = () => {
@@ -24,15 +23,14 @@ export default function EditCategory() {
       ID: categoryId,
       Name: inputName,
     };
-    if(categoryId === 0){
-        http.post("/category",categorySubmit).then(()=>{
-            history.goBack();
-        })
-    }
-    else{
-        http.put("/category/" + ID, categorySubmit).then(()=>{
-            history.goBack();
-        });
+    if (categoryId === 0) {
+      http.post("/category", categorySubmit).then(() => {
+        history.goBack();
+      });
+    } else {
+      http.put("/category/" + ID, categorySubmit).then(() => {
+        history.goBack();
+      });
     }
   };
 

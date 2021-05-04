@@ -17,11 +17,12 @@ namespace BackEnd.Service
         private AplicationDbContext _context;
         private IMapper _mapper;
 
-        public ProductService (AplicationDbContext context, IMapper mapper){
-             _context= context;
-            _mapper =mapper;
+        public ProductService(AplicationDbContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
         }
-        
+
         public async Task<ProductVM> CreateAsync(ProductVM productvm)
         {
             var pro = _mapper.Map<Product>(productvm);
@@ -44,13 +45,16 @@ namespace BackEnd.Service
         {
             if (id <= 0) return null;
             Product result = await _context.Products.FindAsync(id);
+            if (result == null) return null;
             return _mapper.Map<ProductVM>(result);
         }
 
-        public async Task<(List<ProductVM> products, int totalItem)> GetListAsync(int categoryId, SortProduct? sort, int pageSize, int page)
+        public async Task<(List<ProductVM> products, int totalItem)> GetListAsync(int categoryId, SortProduct? sort, int pageSize, int page, string query = null)
         {
             var queryProduct = _context.Products.AsQueryable();
             if (categoryId != 0) queryProduct = queryProduct.Where(item => item.CategoryId == categoryId);
+            if (query != null) queryProduct = queryProduct.Where(item => item.proName.Contains(query));
+
             var totalItem = queryProduct.Count();
 
             if (sort != null)
@@ -68,55 +72,15 @@ namespace BackEnd.Service
             if (page != 0)
             {
                 if (pageSize * (page - 1) <= totalItem) // 10
-                    queryProduct = queryProduct.Skip(page - 1);
+                    queryProduct = queryProduct.Skip(pageSize * (page - 1));
             }
-            if (pageSize!=0)
+            if (pageSize != 0)
                 queryProduct = queryProduct.Take(pageSize);
 
             var result = await queryProduct.ToListAsync();
 
+            var proVMs = _mapper.Map<List<ProductVM>>(result);
 
-            var proVMs = new List<ProductVM>();
-            foreach (var item in result)
-            {
-                var proVM = _mapper.Map<ProductVM>(item);
-                proVMs.Add(proVM);
-            }
-            return (proVMs, totalItem);
-        }
-        public async Task<(List<ProductVM> products, int totalItem)> SearchAsync(string query, SortProduct? sort, int pageSize, int page)
-        {
-            var queryProduct = _context.Products.AsQueryable();
-            if (query != "") queryProduct = queryProduct.Where(item => item.proName.Contains(query));
-            var totalItem = queryProduct.Count();
-
-            if (sort != null)
-            {
-                switch (sort)
-                {
-                    case SortProduct.highPrice:
-                        queryProduct = queryProduct.OrderByDescending(item => item.proPrice);
-                        break;
-                    case SortProduct.lowPrice:
-                        queryProduct = queryProduct.OrderBy(item => item.proPrice);
-                        break;
-                }
-            }
-            if (page != 0)
-            {
-                if (pageSize * (page - 1) <= totalItem) // 10
-                    queryProduct = queryProduct.Skip(page - 1).Take(pageSize);
-            }
-
-            var result = await queryProduct.ToListAsync();
-
-
-            var proVMs = new List<ProductVM>();
-            foreach (var item in result)
-            {
-                var proVM = _mapper.Map<ProductVM>(item);
-                proVMs.Add(proVM);
-            }
             return (proVMs, totalItem);
         }
 
@@ -125,11 +89,11 @@ namespace BackEnd.Service
             if (id <= 0) return false;
             Product obj = await _context.Products.FindAsync(id);
             if (obj == null) return false;
-            if(productvm.proName!= null) obj.proName = productvm.proName;
-            if(productvm.proDescription!=null) obj.proDescription = productvm.proDescription;
-            if(productvm.proPrice > 0) obj.proPrice = productvm.proPrice;
-            if(productvm.CategoryId > 0) obj.CategoryId = productvm.CategoryId;
-            if(productvm.Image !=null) obj.Image = productvm.Image;
+            if (productvm.proName != null) obj.proName = productvm.proName;
+            if (productvm.proDescription != null) obj.proDescription = productvm.proDescription;
+            if (productvm.proPrice > 0) obj.proPrice = productvm.proPrice;
+            if (productvm.CategoryId > 0) obj.CategoryId = productvm.CategoryId;
+            if (productvm.Image != null) obj.Image = productvm.Image;
             _context.SaveChanges();
             return true;
         }

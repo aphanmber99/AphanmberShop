@@ -16,20 +16,17 @@ namespace BackEnd.Service
         private AplicationDbContext _context;
         private IMapper _mapper;
 
-        public UserService (AplicationDbContext context, IMapper mapper){
-            _context =context;
-            _mapper =mapper;
+        public UserService(AplicationDbContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
         }
 
         public async Task<List<UserVM>> GetList()
         {
-            List<User> result =  await _context.Users.ToListAsync();
-            var  userVMs =  new List<UserVM>();
-            foreach (var item in result)
-            {
-                var user = _mapper.Map<UserVM>(item);
-                userVMs.Add(user);
-            }
+            List<User> result = await _context.Users.ToListAsync();
+            var userVMs = new List<UserVM>();
+        
             return userVMs;
         }
     }

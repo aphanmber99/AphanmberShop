@@ -16,9 +16,10 @@ namespace BackEnd.Service
         private AplicationDbContext _context;
         private IMapper _mapper;
 
-        public RatingService (AplicationDbContext context, IMapper mapper){
-            _context =context;
-            _mapper =mapper;
+        public RatingService(AplicationDbContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
         }
 
         public async Task<RatingVM> CreateAsync(string userId, int productId, RatingVM ratingVM)
@@ -33,48 +34,39 @@ namespace BackEnd.Service
 
         public async Task<bool> DeleteAsync(int id)
         {
-            if(id<=0) return false;
+            if (id <= 0) return false;
             Rating obj = await _context.Ratings.FindAsync(id);
-            if(obj == null) return false;
+            if (obj == null) return false;
             _context.Remove(obj);
             _context.SaveChanges();
-            return true;   
+            return true;
         }
 
         public async Task<RatingVM> GetAsync(int id)
         {
-            if(id<=0) return null;
-            Rating result = await _context.Ratings.Where(item => item.ID==id)
+            if (id <= 0) return null;
+            Rating result = await _context.Ratings.Where(item => item.ID == id)
                                     .Include(item => item.User)
                                     .FirstAsync();
+            if(result == null) return null;
             return _mapper.Map<RatingVM>(result);
         }
 
         public async Task<List<RatingVM>> GetListByProductsAsync(int productId)
         {
-            List<Rating> result =  await _context.Ratings.Where(item =>item.ProductID == productId)
+            List<Rating> result = await _context.Ratings.Where(item => item.ProductID == productId)
                                                         .Include(item => item.User)
                                                         .ToListAsync();
-            var  feeVMs =  new List<RatingVM>();
-            foreach (var item in result)
-            {
-                var feeVM = _mapper.Map<RatingVM>(item);
-                feeVMs.Add(feeVM);
-            }
+            var feeVMs = _mapper.Map<List<RatingVM>>(result);
             return feeVMs;
         }
 
         public async Task<List<RatingVM>> GetListByUserAsync(string userId)
         {
-           List<Rating> result =  await _context.Ratings.Where(item =>item.UserAcc == userId)
-                                                        .Include(item => item.User)
-                                                        .ToListAsync();
-            var  feeVMs =  new List<RatingVM>();
-            foreach (var item in result)
-            {
-                var feeVM = _mapper.Map<RatingVM>(item);
-                feeVMs.Add(feeVM);
-            }
+            List<Rating> result = await _context.Ratings.Where(item => item.UserAcc == userId)
+                                                         .Include(item => item.User)
+                                                         .ToListAsync();
+            var feeVMs = _mapper.Map<List<RatingVM>>(result);
             return feeVMs;
         }
     }

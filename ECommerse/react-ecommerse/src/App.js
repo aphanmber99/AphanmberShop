@@ -1,10 +1,9 @@
 import "./App.css";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import React from "react";
 import { Component } from "react";
 import { Switch, Route, Link, BrowserRouter as Router } from "react-router-dom";
-import { ToastContainer } from 'react-toastify';
-
+import { ToastContainer } from "react-toastify";
 
 //components
 //Manage User, Category, Product
@@ -44,7 +43,7 @@ export default class App extends Component {
               className="navbar has-background-danger-light"
               role="navigation"
               aria-label="main navigation"
-              style= {{maxWidth: "100%"}}
+              style={{ maxWidth: "100%" }}
             >
               <div className="navbar-brand">
                 <b className="navbar-item is size-4">Ecommerse</b>
@@ -93,28 +92,28 @@ export default class App extends Component {
               </div>
             </nav>
             <div className="container">
-            <Switch>
-              <Route exact path="/" >
-                <ProductList/>
-              </Route>
-              <Route path="/product/:id">
-                <EditProduct/>
-              </Route>
-              <Route exact path="/category" >
-                <Category/>
-              </Route>
-              <Route path="/category/:ID">
-                <EditCategory/>
-              </Route>
-              <Route path="/User">
-                <User/>
-              </Route>
-              <Route path="/login">
-                <Login/>
-              </Route>
-              <Route path="*" components={Login} />
-            </Switch>
-            <ToastContainer autoClose={2500} />
+              <Switch>
+                <Route exact path="/">
+                  <ProductList />
+                </Route>
+                <Route path="/product/:id">
+                  <EditProduct />
+                </Route>
+                <Route exact path="/category">
+                  <Category />
+                </Route>
+                <Route path="/category/:ID">
+                  <EditCategory />
+                </Route>
+                <Route path="/User">
+                  <User />
+                </Route>
+                <Route path="/login">
+                  <Login />
+                </Route>
+                <Route path="*" components={Login} />
+              </Switch>
+              <ToastContainer autoClose={2500} />
             </div>
           </div>
         </Router>

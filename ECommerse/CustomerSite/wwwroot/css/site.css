@@ -172,3 +172,7 @@ z-index: 1;
 .thuy-dropdown:hover .thuy-dropdown-content {
 display: block;
 }
+
+html{
+  scroll-behavior: smooth;
+}

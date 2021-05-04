@@ -2,7 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 var http = axios.create({
-  baseURL: "https://localhost:5001",
+  baseURL: "https://backend19e581e1a3fc4593a4e56901eb69aedb.azurewebsites.net",
 });
 
 http.interceptors.response.use(

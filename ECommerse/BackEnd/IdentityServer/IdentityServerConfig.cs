@@ -50,9 +50,9 @@ namespace BackEnd.IdentityServer
                     RequireConsent = false,
                     RequirePkce = true,
 
-                    RedirectUris =           { $"https://localhost:5001/swagger/oauth2-redirect.html" },
-                    PostLogoutRedirectUris = { $"https://localhost:5001/swagger/oauth2-redirect.html" },
-                    AllowedCorsOrigins =     { $"https://localhost:5001" },
+                    RedirectUris =           { $"https://backend19e581e1a3fc4593a4e56901eb69aedb.azurewebsites.net/swagger/oauth2-redirect.html" },
+                    PostLogoutRedirectUris = { $"https://backend19e581e1a3fc4593a4e56901eb69aedb.azurewebsites.net/swagger/oauth2-redirect.html" },
+                    AllowedCorsOrigins =     { $"https://backend19e581e1a3fc4593a4e56901eb69aedb.azurewebsites.net" },
 
                     AllowedScopes = new List<string>
                     {

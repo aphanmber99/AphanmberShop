@@ -1,17 +1,16 @@
 import React from "react";
 import http from "../httpClient";
 
-
 export default function User() {
   const [user, setUser] = React.useState([]);
 
   React.useEffect(() => {
     http.get("/user").then(({ data }) => {
-      console.log(data)
+      console.log(data);
       setUser(data);
     });
   }, []);
-//Could not get the user data from BackEnd
+  //Could not get the user data from BackEnd
 
   return (
     <div className="container">
@@ -30,19 +29,19 @@ export default function User() {
             <th>
               <abbr title="Full Name">Phone Number </abbr>
             </th>
-          
           </tr>
         </thead>
-        {user && user.map((acc) => (
-          <tbody key={acc.id}>
-            <tr>
-              <td>{acc.id}</td>
-              <td>{acc.userName}</td>
-              <td>{acc.email}</td>
-              <td>{acc.phoneNumber ?? "No phone"}</td>
-            </tr>
-          </tbody>
-        ))}
+        {user &&
+          user.map((acc) => (
+            <tbody key={acc.id}>
+              <tr>
+                <td>{acc.id}</td>
+                <td>{acc.userName}</td>
+                <td>{acc.email}</td>
+                <td>{acc.phoneNumber ?? "No phone"}</td>
+              </tr>
+            </tbody>
+          ))}
       </table>
     </div>
   );
